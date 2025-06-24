@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Metadata Stripper</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      max-width: 600px;
+    }
+
+    h1 {
+      margin-top: 0;
+    }
+
+    button {
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #1565c0;
+    }
+
+    .footer {
+      margin-top: 20px;
+    }
+
+    .footer a {
+      color: #1976d2;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    #preview img {
+      max-height: 500px;
+      width: auto;
+      display: block;
+      margin: 20px auto 0;
+      border-radius: 6px;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    }
+
+    #preview p {
+      color: #777;
+      font-size: 14px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Metadata Stripper</h1>
+
+    <form id="uploadForm" action="/strip" method="post" enctype="multipart/form-data">
+      <input type="file" name="file" id="fileInput" required><br>
+      <button type="submit">Strip Metadata</button>
+    </form>
+
+    <p>Supports PDF, JPG, PNG, GIF, WEBP, BMP</p>
+
+    <div id="preview"></div>
+
+<div class="footer">
+  <p>
+    <a href="/privacy">Privacy Policy</a> |
+    <a href="/terms">Terms of Service</a> |
+    <a href="/contact">Contact</a>
+  </p>
+</div>
+
+  </div>
+
+  <!-- Debug log -->
+  <script>
+    console.log("Template version 1.1 loaded");
+
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const form = document.getElementById('uploadForm');
+
+    fileInput.addEventListener('change', function () {
+      const file = this.files[0];
+      preview.innerHTML = "";
+
+      if (file) {
+        const reader = new FileReader();
+        const ext = file.name.split('.').pop().toLowerCase();
+
+        if (["jpg", "jpeg", "png", "gif", "webp", "bmp"].includes(ext)) {
+          reader.onload = function (e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            preview.appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        } else {
+          preview.innerHTML = "<p>No preview available for this file type.</p>";
+        }
+      }
+    });
+
+    form.addEventListener('submit', () => {
+      preview.innerHTML = "";
+    });
+  </script>
+</body>
+</html>
